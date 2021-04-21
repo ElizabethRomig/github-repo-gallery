@@ -1,17 +1,20 @@
 //To target the div where profile information will appear.
 const overview = document.querySelector(".overview");
 
+//to target the ul for repo display
+const repoDisplay = document.querySelector(".repo-list");
+
 const username = "ElizabethRomig";
 
-const fetchInfo = async function(){
-    const info = await fetch(`https://api.github.com/users/${username}`);
-    const response = await info.json();
-    console.log(response);
-    displayUser(response);
+//Retrieves user data
+const fetchUser = async function(){
+    const response = await fetch(`https://api.github.com/users/${username}`);
+    const data = await response.json();
+    console.log(data);
+    displayUser(data);
 }
 
-fetchInfo();
-
+//Displays user profile information
 const displayUser = function(data) {
     const newDiv = document.createElement("div");
     newDiv.classList.add("user-info");
@@ -27,4 +30,23 @@ const displayUser = function(data) {
         </div>`
     overview.appendChild(newDiv);
 }
+
+//Retrieves repos
+const fetchRepos = async function (){
+    const response = await fetch(`https://api.github.com/users/${username}/repos?type=public&sort=updated&per_page=100`);
+    const repos = await response.json();
+    displayRepos(repos);
+}
+
+const displayRepos = function(repos){
+    repos.forEach(function(repo) {
+        const listItem = document.createElement("li");
+        listItem.classList.add("repo");
+        listItem.innerHTML = repo.name;
+        repoDisplay.appendChild(listItem);
+    })
+}
+
+fetchUser();
+fetchRepos();
 
