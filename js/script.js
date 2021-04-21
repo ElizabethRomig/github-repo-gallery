@@ -10,9 +10,9 @@ const repoInformation = document.querySelector(".repos");
 //Selects the section with a class of "repo-data" where the individual repo data will appear
 const repoData = document.querySelector(".repo-data");
 
-const viewRepos = document.querySelector(".view-repos");
+const backToRepos = document.querySelector(".view-repos");
 
-
+const filterInput = document.querySelector(".filter-repos");
 
 const username = "ElizabethRomig";
 
@@ -49,6 +49,7 @@ const fetchRepos = async function (){
 }
 
 const displayRepos = function(repos){
+    filterInput.classList.remove("hide");
     repos.forEach(function(repo) {
         const listItem = document.createElement("li");
         listItem.classList.add("repo");
@@ -94,5 +95,27 @@ const displaySelectedRepo = function(repoInfo, languages) {
     repoData.appendChild(newDiv);
     repoData.classList.remove("hide");
     repoInformation.classList.add("hide");
-    viewRepos.classList.remove("hide");
+    backToRepos.classList.remove("hide");
 }
+
+backToRepos.addEventListener("click", function(){
+    repoData.classList.add("hide");
+    repoInformation.classList.remove("hide");
+    backToRepos.classList.add("hide");
+})
+
+filterInput.addEventListener("input", function(e){
+    const searchTerm = e.target.value;
+    const repos = document.getElementsByClassName("repo");
+    console.log (repos);
+    const searchLower = searchTerm.toLowerCase();
+    for (let repo in repos) {
+        const repoLower = repos[repo].innerText;
+        console.log(repoLower);
+        if (repoLower.includes(searchLower)){
+            repos[repo].classList.remove("hide");
+        } else {
+            repos[repo].classList.add("hide");
+        }
+    }
+})
